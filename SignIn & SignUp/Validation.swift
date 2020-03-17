@@ -10,10 +10,6 @@ import Foundation
 
 class Validation {
     
-    
-    static let shared = Validation()
-    private init() {}
-    
     let numbers = "0123456789"
     let lower_case = "abcdefghijklmnopqrstuvwxyz"
     let upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"

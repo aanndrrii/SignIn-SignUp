@@ -16,6 +16,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var signUpButton: UIButton!
     
     let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+    let validation = Validation()
     
     
     override func viewDidLoad() {
@@ -27,7 +28,7 @@ class SignUpViewController: UIViewController {
 
     @IBAction func signUpDidClick(_ sender: UIButton) {
         
-        let message = Validation.shared.validateSignUp(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "", confirmPassword: confirmPasswordTextField.text ?? "")
+        let message = validation.validateSignUp(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "", confirmPassword: confirmPasswordTextField.text ?? "")
         
         if message == Validation.Success.userSignedUpSuccessfully.rawValue {
             //presentAlertWithMessage(message: message)

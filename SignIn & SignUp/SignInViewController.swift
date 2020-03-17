@@ -13,7 +13,9 @@ class SignInViewController: UIViewController {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signInButton: UIButton!
+    
     let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+    let validation = Validation()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +25,7 @@ class SignInViewController: UIViewController {
     }
 
     @IBAction func signInButtonDidClick(_ sender: UIButton) {
-        let message = Validation.shared.validateSignIn(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "")
+        let message = validation.validateSignIn(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "")
         
         if message == Validation.Success.userSignedInSuccessfully.rawValue {
             //presentAlertWithMessage(message: message)
