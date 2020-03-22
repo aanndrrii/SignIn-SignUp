@@ -96,12 +96,12 @@ class Validation {
         return result
     }
     
-    func validateUsernameSignUp(username: String) -> String {
-        if username == "" {
+    func validateUsernameSignUp(user: User) -> String {
+        if user.username == "" {
             return Username.usernameIsEmpty.rawValue
         }
         
-        if (defaults.object(forKey: "Username") as? String ?? "") == username {
+        if user.isRegistered() {
             return Username.userCurrentlyExists.rawValue
         } else {
             return ""
@@ -119,7 +119,8 @@ class Validation {
     func validateSignUp(username: String, password: String, confirmPassword: String) -> String {
         var result = ""
         
-        let usernameNotification = validateUsernameSignUp(username: username)
+        let user = User(username: username, password: password)
+        let usernameNotification = validateUsernameSignUp(user: user)
         let passwordNotification = validatePassword(password: password)
         let confirmPasswordNotification = validateConfirmPassword(password: password, confirmPassword: confirmPassword)
         
@@ -139,31 +140,30 @@ class Validation {
         
         if result == "" {
             result = Success.userSignedUpSuccessfully.rawValue
-            defaults.set(username, forKey: "Username")
-            defaults.set(password, forKey: "Password")
+            user.register()
         }
         
         return result
     }
     
-    func validateUsernameSignIn(username: String) -> String {
-        if username == "" {
+    func validateUsernameSignIn(user: User) -> String {
+        if user.username == "" {
             return Username.usernameIsEmpty.rawValue
         }
         
-        if (defaults.object(forKey: "Username") as? String ?? "") == username {
+        if user.isRegistered() {
             return ""
         } else {
             return Username.userDoesNotExist.rawValue
         }
     }
     
-    func validatePasswordSignIn(password: String) -> String {
-        if password == "" {
+    func validatePasswordSignIn(user: User) -> String {
+        if user.password == "" {
             return Password.passwordIsTooShort.rawValue
         }
         
-        if (defaults.object(forKey: "Password") as? String ?? "") == password {
+        if user.validatePassword() {
             return ""
         } else {
             return Password.incorrectPassword.rawValue
@@ -173,8 +173,9 @@ class Validation {
     func validateSignIn(username: String, password: String) -> String {
         var result = ""
         
-        let usernameNotification = validateUsernameSignIn(username: username)
-        let passwordNotification = validatePasswordSignIn(password: password)
+        let user = User(username: username, password: password)
+        let usernameNotification = validateUsernameSignIn(user: user)
+        let passwordNotification = validatePasswordSignIn(user: user)
         
         if usernameNotification != "" {
             result += usernameNotification

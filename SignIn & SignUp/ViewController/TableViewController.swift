@@ -37,7 +37,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
           if (statusCode == 200) {
             print("Everyone is fine, file downloaded successfully.")
             var result = String(data: data!, encoding: .utf8)!
-            //var result:String = "[\"Comics_Ring\",\"Fence_Towel\",\"Comics_Settings\",\"Whale_Clock\",\"Crab_Male\",\"Dislike_Drugs\",\"Crab_Toolbox\",\"Plus_Ice_cream_cone\",\"Settings_Crab\",\"Allergies_Puppy\"]"
             result = String(result.dropLast(2))
             result = String(result.dropFirst(2))
             self.tableData[0] = result.components(separatedBy: "\",\"")
@@ -55,16 +54,6 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableData[section].count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")! as UITableViewCell
-        cell.textLabel!.text = tableData[indexPath.section][indexPath.row]
-        return cell;
-    }
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return tableData.count
     }
@@ -77,10 +66,23 @@ class TableViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     @IBAction func addButtonDidClick(_ sender: UIButton) {
+        if addFieldTextField.text! == "" {
+            return
+        }
         tableData[1].append(addFieldTextField.text!)
         tableView.reloadData()
         addFieldTextField.text = ""
         view.endEditing(true)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tableData[section].count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")! as UITableViewCell
+        cell.textLabel!.text = tableData[indexPath.section][indexPath.row]
+        return cell;
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

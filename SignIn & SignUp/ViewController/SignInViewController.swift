@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  SignInViewController.swift
 //  SignIn & SignUp
 //
 //  Created by Andrii on 3/12/20.
@@ -8,43 +8,42 @@
 
 import UIKit
 
-class SignUpViewController: UIViewController {
+class SignInViewController: UIViewController {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var confirmPasswordTextField: UITextField!
-    @IBOutlet weak var signUpButton: UIButton!
+    @IBOutlet weak var signInButton: UIButton!
     
     let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
     let validation = Validation()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        signUpButton.layer.cornerRadius = 5
+        signInButton.layer.cornerRadius = 5
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        usernameTextField.text = ""
+        passwordTextField.text = ""
     }
 
-    @IBAction func signUpDidClick(_ sender: UIButton) {
+    @IBAction func signInButtonDidClick(_ sender: UIButton) {
+        let message = validation.validateSignIn(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "")
         
-        let message = validation.validateSignUp(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "", confirmPassword: confirmPasswordTextField.text ?? "")
-        
-        if message == Validation.Success.userSignedUpSuccessfully.rawValue {
+        if message == Validation.Success.userSignedInSuccessfully.rawValue {
             //presentAlertWithMessage(message: message)
-            let viewController = self.storyBoard.instantiateViewController(withIdentifier: "signin") as! SignInViewController
+            let viewController = self.storyBoard.instantiateViewController(withIdentifier: "table") as! TableViewController
             viewController.modalPresentationStyle = .fullScreen
             self.navigationController?.pushViewController(viewController, animated: true)
         } else {
             presentAlertWithMessage(message: message)
-        }
-        
+        }        
     }
     
-    @IBAction func SignInButtonDidClick(_ sender: Any) {
-        let viewController = self.storyBoard.instantiateViewController(withIdentifier: "signin") as! SignInViewController
-        viewController.modalPresentationStyle = .fullScreen
-        self.navigationController?.pushViewController(viewController, animated: true)
+    @IBAction func signUpButtonDidClick(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
     }
     
     func presentAlertWithMessage(message: String){
@@ -54,4 +53,3 @@ class SignUpViewController: UIViewController {
     }
     
 }
-
